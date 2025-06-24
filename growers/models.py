@@ -86,11 +86,13 @@ class GradeAnalysis(models.Model):
 class CreditorRecovery(models.Model):
     seasonal_report = models.ForeignKey(SeasonalReport, on_delete=models.CASCADE, related_name='creditor_recoveries')
     creditor = models.ForeignKey(Creditor, on_delete=models.CASCADE, related_name='recoveries')
-    total_owed_usd = models.DecimalField(max_digits=12, decimal_places=2)
-    total_paid_usd = models.DecimalField(max_digits=12, decimal_places=2)
+    total_owed_usd = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
+    total_paid_usd = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True )
     recovery_percentage = models.DecimalField(
         max_digits=5, 
         decimal_places=2, 
+        null=True, 
+        blank=True,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         help_text="Recovery percentage, e.g., 49.57"
     )

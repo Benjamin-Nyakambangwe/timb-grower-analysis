@@ -187,8 +187,7 @@ class TIMBScraper:
         try:
             response = self.session.post(self.analysis_form_url, data=payload, verify=False)
             response.raise_for_status()
-            # Be polite to the server
-            time.sleep(1) # Wait 1 second between requests
+            time.sleep(10) # Wait 30 seconds between requests
             return self.parse_report(response.text)
         except requests.exceptions.RequestException as e:
             print(f"An error occurred while fetching report for {grower_id}: {e}")

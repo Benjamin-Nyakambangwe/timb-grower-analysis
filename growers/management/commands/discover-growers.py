@@ -11,6 +11,7 @@ GROWER_ID_START = 100000
 GROWER_ID_END = 400000 # The loop will go up to and include this number
 SEASONS = [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2025] # Put most recent first
 PROBE_SEASON = 2024 # The season to use for discovery
+# GROWER_FIRST_SEASON = 2018
 
 class Command(BaseCommand):
     help = 'Discovers and scrapes grower analysis data from the TIMB website within a given range.'
@@ -39,25 +40,47 @@ class Command(BaseCommand):
                 continue
 
             # --- DISCOVERY PROBE ---
-            self.stdout.write(f"Probing for new grower: {grower_id} in season {PROBE_SEASON}...")
-            
-            report_data = scraper.fetch_report(grower_id, PROBE_SEASON)
-
+            for season in SEASONS:
+                self.stdout.write(f"Probing for new grower: {grower_id} in season {season}...")
+                report_data = scraper.fetch_report(grower_id, season)
+                if report_data['grower_info']['name'] != '':
+                    print("--------------------------------")
+                    print(report_data['grower_info']['name'])
+                    print("--------------------------------")
+                    self.stdout.write(self.style.SUCCESS(f"SUCCESS! Discovered new grower: {grower_id}"))
+                    GROWER_FIRST_SEASON = season
+                    break
+                else:
+                    self.stdout.write(f"No report for {grower_id} in season {season}. Assuming ID is invalid.")
+                    
             if report_data:
-                # --- GROWER DISCOVERED! ---
-                self.stdout.write(self.style.SUCCESS(f"SUCCESS! Discovered new grower: {grower_id}"))
-                
                 # Use a transaction to ensure all data for a grower is saved together
                 with transaction.atomic():
                     grower = self.create_grower_from_report(report_data)
-                    self.create_seasonal_data(grower, PROBE_SEASON, report_data)
+                    # self.create_seasonal_data(grower, PROBE_SEASON, report_data)
                 
                 # Now that we know the grower is real, get the rest of their seasons
                 self.scrape_all_seasons_for_grower(scraper, grower)
-            else:
-                # --- GROWER NOT FOUND ---
-                self.stdout.write(f"No report for {grower_id} in probe season. Assuming ID is invalid.")
-                # We do nothing and move to the next ID, saving time.
+            
+            # self.stdout.write(f"Probing for new grower: {grower_id} in season {PROBE_SEASON}...")
+            #
+            # report_data = scraper.fetch_report(grower_id, PROBE_SEASON)
+
+            # if report_data:
+            #     # --- GROWER DISCOVERED! ---
+            #     self.stdout.write(self.style.SUCCESS(f"SUCCESS! Discovered new grower: {grower_id}"))
+                
+            #     # Use a transaction to ensure all data for a grower is saved together
+            #     with transaction.atomic():
+            #         grower = self.create_grower_from_report(report_data)
+            #         # self.create_seasonal_data(grower, PROBE_SEASON, report_data)
+                
+            #     # Now that we know the grower is real, get the rest of their seasons
+            #     self.scrape_all_seasons_for_grower(scraper, grower)
+            # else:
+            #     # --- GROWER NOT FOUND ---
+            #     self.stdout.write(f"No report for {grower_id} in probe season. Assuming ID is invalid.")
+            #     # We do nothing and move to the next ID, saving time.
 
         self.stdout.write(self.style.SUCCESS('Discovery and scraping process complete.'))
 
