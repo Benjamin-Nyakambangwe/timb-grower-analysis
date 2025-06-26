@@ -15,7 +15,7 @@ class ThreadedTIMBScraper:
     """
     Thread-safe version of TIMBScraper with concurrent request capabilities.
     """
-    def __init__(self, username, password, max_workers=5, request_delay=0.5):
+    def __init__(self, username, password, max_workers=5, request_delay=5):
         self.base_url = "https://www.timb.co.zw/booking/"
         self.login_url = self.base_url + "index.php?module=login&item=card"
         self.analysis_form_url = self.base_url + "index.php?module=grower&item=analysis"
@@ -348,7 +348,7 @@ if __name__ == '__main__':
     username = input("Enter your TIMB username: ")
     password = getpass.getpass("Enter your TIMB password: ")
 
-    scraper = ThreadedTIMBScraper(username, password, max_workers=5, request_delay=0.3)
+    scraper = ThreadedTIMBScraper(username, password, max_workers=5, request_delay=5)
     
     if scraper.login():
         # Test with a small range
