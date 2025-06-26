@@ -171,8 +171,7 @@ class TIMBScraper:
         """Fetches and returns the parsed data for a single grower and season."""
         print(f"Fetching report for Grower: {grower_id}, Season: {season}...")
         
-        # Grower ID seems to be split into Prefix, Number, Suffix
-        # Example: V114260 -> Prefix=V, Number=114260, Suffix=''
+      
         prefix = grower_id[0]
         number = grower_id[1:]
         
@@ -213,5 +212,3 @@ if __name__ == '__main__':
             # Print the data in a nicely formatted way
             print(json.dumps(report_data, indent=2))
 
-            # HERE IS WHERE YOU WOULD CALL YOUR DJANGO ORM LOGIC
-            # e.g., create_or_update_django_records(report_data)
