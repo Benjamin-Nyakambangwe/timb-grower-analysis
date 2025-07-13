@@ -89,12 +89,12 @@ class CreditorRecovery(models.Model):
     total_owed_usd = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     total_paid_usd = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True )
     recovery_percentage = models.DecimalField(
-        max_digits=5, 
+        max_digits=8, 
         decimal_places=2, 
         null=True, 
         blank=True,
-        validators=[MinValueValidator(0), MaxValueValidator(100)],
-        help_text="Recovery percentage, e.g., 49.57"
+        validators=[MinValueValidator(0)],
+        help_text="Recovery percentage, e.g., 49.57 (can exceed 100% for over-recovery cases)"
     )
 
     class Meta:

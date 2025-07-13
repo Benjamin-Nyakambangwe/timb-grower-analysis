@@ -192,11 +192,13 @@ class ThreadedTIMBScraper:
                         cells = row.find_all('td')
                         if len(cells) >= 5:
                             recovery_text = cells[4].get_text(strip=True)
+                            recovery_percentage = self._parse_value(recovery_text)
+                            
                             data['creditor_recoveries'].append({
                                 'creditor_name': self._clean_text(cells[1].get_text()),
                                 'total_owed_usd': self._parse_value(cells[2].get_text()),
                                 'total_paid_usd': self._parse_value(cells[3].get_text()),
-                                'recovery_percentage': self._parse_value(recovery_text),
+                                'recovery_percentage': recovery_percentage,
                                 'notes': recovery_text if not self._parse_value(recovery_text) else ''
                             })
 
