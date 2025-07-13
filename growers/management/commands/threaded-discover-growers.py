@@ -11,8 +11,8 @@ from growers.models import Grower, Contractor, Creditor, SeasonalReport, GradeAn
 GROWER_ID_START = 100000
 GROWER_ID_END = 120000
 BATCH_SIZE = 200
-MAX_WORKERS = 6  # Number of threads
-REQUEST_DELAY = 0.4  # Seconds between requests
+MAX_WORKERS = 10  # Number of threads
+REQUEST_DELAY = 2  # Seconds between requests
 
 
 class Command(BaseCommand):
