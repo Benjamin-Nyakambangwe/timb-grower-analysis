@@ -15,6 +15,7 @@ MAX_WORKERS = 10  # Number of threads
 REQUEST_DELAY = 2  # Seconds between requests
 
 
+
 class Command(BaseCommand):
     help = 'Threaded version: Discovers and scrapes grower data using multithreading'
 
