@@ -12,7 +12,7 @@ GROWER_ID_START = 100000
 GROWER_ID_END = 120000
 BATCH_SIZE = 200
 MAX_WORKERS = 6  # Number of threads
-REQUEST_DELAY = 0.4  # Seconds between requests
+REQUEST_DELAY = 5  # Seconds between requests
 
 
 class Command(BaseCommand):
